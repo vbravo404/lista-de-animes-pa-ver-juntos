@@ -327,30 +327,6 @@
 </ul>
 
 <script>
-    document.querySelectorAll('.anime-principal input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', function(){
-            const listItem=this.closest('.item');
-            if(this.checked){
-                listItem.classList.add('completed');
-            }else{
-                listItem.classList.remove('completed');
-            }
-        });
-    });
-
-    document.querySelectorAll('.pelicula-item input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', function(){
-            const peliculaItem=this.closest('.pelicula-item');
-            if(this.checked){
-                peliculaItem.classList.add('completed-pelicula');
-            }else{
-                peliculaItem.classList.remove('completed-pelicula');
-            }
-        });
-    });
-</script>
-
-<script>
     // Cargar estados guardados al iniciar la página
     document.addEventListener('DOMContentLoaded', function() {
         // Cargar estados de animes principales
@@ -411,4 +387,5 @@
     
 </body>
 </html>
+
 
