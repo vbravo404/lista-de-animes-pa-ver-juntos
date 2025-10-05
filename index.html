@@ -300,6 +300,8 @@
                     <input type="checkbox" id="eva-peli5">
                 </div>
             </li>
+        </ul>
+    </li> <!-- CORREGIDO: cerrada etiqueta li de Evangelion -->
 
     <li class="item">
         <div class="anime-principal">
@@ -327,68 +329,64 @@
 </ul>
 
 <script>
-    document.querySelectorAll('.anime-principal input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', function(){
-            const listItem=this.closest('.item');
-            if(this.checked){
-                listItem.classList.add('completed');
-            }else{
-                listItem.classList.remove('completed');
-            }
-        });
-    });
+    // UN SOLO SCRIPT QUE COMBINA AMBAS FUNCIONALIDADES
+    document.addEventListener('DOMContentLoaded', function() {
+        // Cargar estados guardados
+        function cargarEstado() {
+            const storage = localStorage || sessionStorage;
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                const guardado = storage.getItem(checkbox.id);
+                if (guardado === 'true') {
+                    checkbox.checked = true;
+                    // Aplicar clase correspondiente
+                    if (checkbox.closest('.pelicula-item')) {
+                        checkbox.closest('.pelicula-item').classList.add('completed-pelicula');
+                    } else if (checkbox.closest('.anime-principal')) {
+                        checkbox.closest('.item').classList.add('completed');
+                    }
+                }
+            });
+        }
 
-    document.querySelectorAll('.pelicula-item input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', function(){
-            const peliculaItem=this.closest('.pelicula-item');
-            if(this.checked){
-                peliculaItem.classList.add('completed-pelicula');
-            }else{
-                peliculaItem.classList.remove('completed-pelicula');
-            }
-        });
-    });
-</script>
+        // Configurar event listeners
+        function configurarEventos() {
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                // Remover event listeners previos para evitar duplicados
+                checkbox.replaceWith(checkbox.cloneNode(true));
+            });
 
-<script>
-    function guardarEstado() {
-        // Intentar con localStorage primero, luego sessionStorage
-        const storage = localStorage || sessionStorage;
-        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-            storage.setItem(checkbox.id, checkbox.checked);
-        });
-    }
+            // Re-seleccionar después del clone
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const storage = localStorage || sessionStorage;
+                    
+                    // Aplicar clases visuales
+                    if (this.closest('.pelicula-item')) {
+                        const peliculaItem = this.closest('.pelicula-item');
+                        if (this.checked) {
+                            peliculaItem.classList.add('completed-pelicula');
+                        } else {
+                            peliculaItem.classList.remove('completed-pelicula');
+                        }
+                    } else if (this.closest('.anime-principal')) {
+                        const listItem = this.closest('.item');
+                        if (this.checked) {
+                            listItem.classList.add('completed');
+                        } else {
+                            listItem.classList.remove('completed');
+                        }
+                    }
+                    
+                    // Guardar estado
+                    storage.setItem(this.id, this.checked);
+                });
+            });
+        }
 
-    function cargarEstado() {
-        const storage = localStorage || sessionStorage;
-        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-            const guardado = storage.getItem(checkbox.id);
-            if (guardado === 'true') {
-                checkbox.checked = true;
-                const elemento = checkbox.closest('.item') || checkbox.closest('.pelicula-item');
-                elemento.classList.add(checkbox.closest('.pelicula-item') ? 'completed-pelicula' : 'completed');
-            }
-        });
-    }
-
-    document.addEventListener('DOMContentLoaded', cargarEstado);
-    
-    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            const elemento = this.closest('.item') || this.closest('.pelicula-item');
-            if(this.checked){
-                elemento.classList.add(this.closest('.pelicula-item') ? 'completed-pelicula' : 'completed');
-            }else{
-                elemento.classList.remove(this.closest('.pelicula-item') ? 'completed-pelicula' : 'completed');
-            }
-            guardarEstado();
-        });
+        cargarEstado();
+        configurarEventos();
     });
 </script>
     
 </body>
 </html>
-
-
-
-
