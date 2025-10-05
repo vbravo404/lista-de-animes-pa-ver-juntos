@@ -351,56 +351,44 @@
 </script>
 
 <script>
-    // Usar sessionStorage en lugar de localStorage
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.anime-principal input[type="checkbox"]').forEach(checkbox => {
-            const guardado = sessionStorage.getItem(checkbox.id);
-            if (guardado === 'true') {
-                checkbox.checked = true;
-                const listItem = checkbox.closest('.item');
-                listItem.classList.add('completed');
-            }
+    function guardarEstado() {
+        // Intentar con localStorage primero, luego sessionStorage
+        const storage = localStorage || sessionStorage;
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            storage.setItem(checkbox.id, checkbox.checked);
         });
-        
-        document.querySelectorAll('.pelicula-item input[type="checkbox"]').forEach(checkbox => {
-            const guardado = sessionStorage.getItem(checkbox.id);
-            if (guardado === 'true') {
-                checkbox.checked = true;
-                const peliculaItem = checkbox.closest('.pelicula-item');
-                peliculaItem.classList.add('completed-pelicula');
-            }
-        });
-    });
+    }
 
-    document.querySelectorAll('.anime-principal input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', function(){
-            const listItem = this.closest('.item');
-            if(this.checked){
-                listItem.classList.add('completed');
-                sessionStorage.setItem(this.id, 'true');
-            }else{
-                listItem.classList.remove('completed');
-                sessionStorage.setItem(this.id, 'false');
+    function cargarEstado() {
+        const storage = localStorage || sessionStorage;
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            const guardado = storage.getItem(checkbox.id);
+            if (guardado === 'true') {
+                checkbox.checked = true;
+                const elemento = checkbox.closest('.item') || checkbox.closest('.pelicula-item');
+                elemento.classList.add(checkbox.closest('.pelicula-item') ? 'completed-pelicula' : 'completed');
             }
         });
-    });
+    }
+
+    document.addEventListener('DOMContentLoaded', cargarEstado);
     
-    document.querySelectorAll('.pelicula-item input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', function(){
-            const peliculaItem = this.closest('.pelicula-item');
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const elemento = this.closest('.item') || this.closest('.pelicula-item');
             if(this.checked){
-                peliculaItem.classList.add('completed-pelicula');
-                sessionStorage.setItem(this.id, 'true');
+                elemento.classList.add(this.closest('.pelicula-item') ? 'completed-pelicula' : 'completed');
             }else{
-                peliculaItem.classList.remove('completed-pelicula');
-                sessionStorage.setItem(this.id, 'false');
+                elemento.classList.remove(this.closest('.pelicula-item') ? 'completed-pelicula' : 'completed');
             }
+            guardarEstado();
         });
     });
 </script>
     
 </body>
 </html>
+
 
 
 
