@@ -349,6 +349,66 @@
         });
     });
 </script>
+
+<script>
+    // Cargar estados guardados al iniciar la página
+    document.addEventListener('DOMContentLoaded', function() {
+        // Cargar estados de animes principales
+        document.querySelectorAll('.anime-principal input[type="checkbox"]').forEach(checkbox => {
+            const guardado = localStorage.getItem(checkbox.id);
+            if (guardado === 'true') {
+                checkbox.checked = true;
+                // Aplicar la clase completed si está marcado
+                const listItem = checkbox.closest('.item');
+                if (checkbox.checked) {
+                    listItem.classList.add('completed');
+                }
+            }
+        });
+        
+        // Cargar estados de películas
+        document.querySelectorAll('.pelicula-item input[type="checkbox"]').forEach(checkbox => {
+            const guardado = localStorage.getItem(checkbox.id);
+            if (guardado === 'true') {
+                checkbox.checked = true;
+                // Aplicar la clase completed-pelicula si está marcado
+                const peliculaItem = checkbox.closest('.pelicula-item');
+                if (checkbox.checked) {
+                    peliculaItem.classList.add('completed-pelicula');
+                }
+            }
+        });
+    });
+
+    // Guardar estado de animes principales
+    document.querySelectorAll('.anime-principal input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function(){
+            const listItem = this.closest('.item');
+            if(this.checked){
+                listItem.classList.add('completed');
+                localStorage.setItem(this.id, 'true');
+            }else{
+                listItem.classList.remove('completed');
+                localStorage.setItem(this.id, 'false');
+            }
+        });
+    });
+    
+    // Guardar estado de películas
+    document.querySelectorAll('.pelicula-item input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function(){
+            const peliculaItem = this.closest('.pelicula-item');
+            if(this.checked){
+                peliculaItem.classList.add('completed-pelicula');
+                localStorage.setItem(this.id, 'true');
+            }else{
+                peliculaItem.classList.remove('completed-pelicula');
+                localStorage.setItem(this.id, 'false');
+            }
+        });
+    });
+</script>        
     
 </body>
+
 </html>
