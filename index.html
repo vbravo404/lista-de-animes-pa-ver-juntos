@@ -351,44 +351,56 @@
 </script>
 
 <script>
-    // Guardar estados en URL
-    function actualizarURL() {
-        const params = new URLSearchParams();
-        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-            params.set(checkbox.id, checkbox.checked);
-        });
-        window.location.hash = params.toString();
-    }
-
-    // Cargar estados desde URL
-    function cargarDesdeURL() {
-        const params = new URLSearchParams(window.location.hash.slice(1));
-        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-            const estado = params.get(checkbox.id);
-            if (estado === 'true') {
+    // Usar sessionStorage en lugar de localStorage
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.anime-principal input[type="checkbox"]').forEach(checkbox => {
+            const guardado = sessionStorage.getItem(checkbox.id);
+            if (guardado === 'true') {
                 checkbox.checked = true;
-                const elemento = checkbox.closest('.item') || checkbox.closest('.pelicula-item');
-                elemento.classList.add(checkbox.closest('.pelicula-item') ? 'completed-pelicula' : 'completed');
+                const listItem = checkbox.closest('.item');
+                listItem.classList.add('completed');
             }
         });
-    }
-
-    document.addEventListener('DOMContentLoaded', cargarDesdeURL);
-    
-    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            const elemento = this.closest('.item') || this.closest('.pelicula-item');
-            if(this.checked){
-                elemento.classList.add(this.closest('.pelicula-item') ? 'completed-pelicula' : 'completed');
-            }else{
-                elemento.classList.remove(this.closest('.pelicula-item') ? 'completed-pelicula' : 'completed');
+        
+        document.querySelectorAll('.pelicula-item input[type="checkbox"]').forEach(checkbox => {
+            const guardado = sessionStorage.getItem(checkbox.id);
+            if (guardado === 'true') {
+                checkbox.checked = true;
+                const peliculaItem = checkbox.closest('.pelicula-item');
+                peliculaItem.classList.add('completed-pelicula');
             }
-            actualizarURL();
+        });
+    });
+
+    document.querySelectorAll('.anime-principal input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function(){
+            const listItem = this.closest('.item');
+            if(this.checked){
+                listItem.classList.add('completed');
+                sessionStorage.setItem(this.id, 'true');
+            }else{
+                listItem.classList.remove('completed');
+                sessionStorage.setItem(this.id, 'false');
+            }
+        });
+    });
+    
+    document.querySelectorAll('.pelicula-item input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function(){
+            const peliculaItem = this.closest('.pelicula-item');
+            if(this.checked){
+                peliculaItem.classList.add('completed-pelicula');
+                sessionStorage.setItem(this.id, 'true');
+            }else{
+                peliculaItem.classList.remove('completed-pelicula');
+                sessionStorage.setItem(this.id, 'false');
+            }
         });
     });
 </script>
     
 </body>
 </html>
+
 
 
