@@ -351,64 +351,44 @@
 </script>
 
 <script>
-    // Cargar estados guardados al iniciar la página
-    document.addEventListener('DOMContentLoaded', function() {
-        // Cargar estados de animes principales
-        document.querySelectorAll('.anime-principal input[type="checkbox"]').forEach(checkbox => {
-            const guardado = localStorage.getItem(checkbox.id);
-            if (guardado === 'true') {
-                checkbox.checked = true;
-                // Aplicar la clase completed si está marcado
-                const listItem = checkbox.closest('.item');
-                if (checkbox.checked) {
-                    listItem.classList.add('completed');
-                }
-            }
+    // Guardar estados en URL
+    function actualizarURL() {
+        const params = new URLSearchParams();
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            params.set(checkbox.id, checkbox.checked);
         });
-        
-        // Cargar estados de películas
-        document.querySelectorAll('.pelicula-item input[type="checkbox"]').forEach(checkbox => {
-            const guardado = localStorage.getItem(checkbox.id);
-            if (guardado === 'true') {
-                checkbox.checked = true;
-                // Aplicar la clase completed-pelicula si está marcado
-                const peliculaItem = checkbox.closest('.pelicula-item');
-                if (checkbox.checked) {
-                    peliculaItem.classList.add('completed-pelicula');
-                }
-            }
-        });
-    });
+        window.location.hash = params.toString();
+    }
 
-    // Guardar estado de animes principales
-    document.querySelectorAll('.anime-principal input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', function(){
-            const listItem = this.closest('.item');
-            if(this.checked){
-                listItem.classList.add('completed');
-                localStorage.setItem(this.id, 'true');
-            }else{
-                listItem.classList.remove('completed');
-                localStorage.setItem(this.id, 'false');
+    // Cargar estados desde URL
+    function cargarDesdeURL() {
+        const params = new URLSearchParams(window.location.hash.slice(1));
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            const estado = params.get(checkbox.id);
+            if (estado === 'true') {
+                checkbox.checked = true;
+                const elemento = checkbox.closest('.item') || checkbox.closest('.pelicula-item');
+                elemento.classList.add(checkbox.closest('.pelicula-item') ? 'completed-pelicula' : 'completed');
             }
         });
-    });
+    }
+
+    document.addEventListener('DOMContentLoaded', cargarDesdeURL);
     
-    // Guardar estado de películas
-    document.querySelectorAll('.pelicula-item input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', function(){
-            const peliculaItem = this.closest('.pelicula-item');
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const elemento = this.closest('.item') || this.closest('.pelicula-item');
             if(this.checked){
-                peliculaItem.classList.add('completed-pelicula');
-                localStorage.setItem(this.id, 'true');
+                elemento.classList.add(this.closest('.pelicula-item') ? 'completed-pelicula' : 'completed');
             }else{
-                peliculaItem.classList.remove('completed-pelicula');
-                localStorage.setItem(this.id, 'false');
+                elemento.classList.remove(this.closest('.pelicula-item') ? 'completed-pelicula' : 'completed');
             }
+            actualizarURL();
         });
     });
 </script>
     
 </body>
 </html>
+
 
