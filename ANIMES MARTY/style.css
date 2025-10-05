@@ -1,0 +1,116 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 50px;
+    background-color:wheat;
+    color:black;
+}
+
+h1{
+    text-align: center;
+    color:darkblue;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+}
+
+.lista-anime{
+    list-style: none;
+    padding: 0;
+}
+
+.item{
+    background: whitesmoke;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.anime-principal{
+    padding: 15px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background-color 0.2s;
+}
+
+.anime-principal:hover{
+    background-color: #f8f9fa;
+}
+
+.anime-content{
+    display: flex;
+    align-items: baseline;
+    flex: 1;
+}
+
+.anime{
+    font-size: 1.4em;
+    font-weight: bold;
+    margin: 0;
+    color:black;
+}
+
+.detalles{
+    font-size: 1em;
+    color: grey;
+    margin-left: 5px;
+}
+
+.checkbox-container {
+    margin-left: 10px;
+}
+
+input[type="checkbox"]{
+    transform: scale(1.5);
+    cursor: pointer;
+}
+
+.peliculas-lista{
+    background-color: #f8f9fa;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.pelicula-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 25px 10px 35px;
+    border-bottom: 1px solid#e9ecef;
+}
+
+.pelicula-content{
+    display: flex;
+    align-items: baseline;
+    flex: 1;
+}
+
+.pelicula-item:last-child{
+    border-bottom: none;
+}
+
+.pelicula-nombre{
+    font-size: 1.2em;
+    font-weight: 600;
+    color: dimgray;
+}
+
+.pelicula-content .detalles{
+    font-size: 1em;
+    color: grey;
+    margin-left: 5px;
+}
+
+.completed .anime-content .anime,
+.completed .anime-content .detalles{
+    text-decoration: line-through;
+    color: #95a5a6;
+}
+
+.completed-pelicula .pelicula-content .pelicula-nombre,
+.completed-pelicula .pelicula-content .detalles {
+    text-decoration: line-through;
+    color: #bdc3c7;
+}
